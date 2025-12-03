@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #111827;
+  background-color: #f9fafb;
+}
+
+body,
+#root {
+  min-height: 100vh;
+  margin: 0;
+}
+
+.bg-main-gradient {
+  background: linear-gradient(135deg, #ff00cc, #6a00ff);
+}
+
+.bg-hero-gradient {
+  background: linear-gradient(135deg, #2b0052, #6a00ff, #ff00cc);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+}
+
