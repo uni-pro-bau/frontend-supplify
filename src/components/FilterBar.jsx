@@ -2,7 +2,7 @@ import { Button } from './ui/button.jsx';
 import { Input } from './ui/input.jsx';
 import { CalendarCheck2 } from 'lucide-react';
 
-const presets = ['Last 7 days', 'Last 30 days', 'Quarter', 'Custom'];
+const presets = ['Last 7 days', 'Last 30 days', 'Custom'];
 
 function FilterBar() {
   return (

@@ -55,7 +55,7 @@ function Login() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSignIn = async () => {
+  async function handleSignIn() {
     try {
       setLoading(true);
       setError(null);
@@ -67,7 +67,7 @@ function Login() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -119,6 +119,13 @@ function Login() {
             <Button className="w-full rounded-2xl text-base" onClick={handleSignIn} disabled={loading}>
               {loading ? 'Signing in…' : 'Sign in'}
             </Button>
+            <Button
+              variant="outline"
+              className="w-full rounded-2xl text-base border-purple-300 text-purple-600"
+              onClick={() => navigate('/reports')}
+            >
+              Go to Dashboard (Temporary)
+            </Button>
             <div className="flex items-center gap-4">
               <Separator />
               <span className="text-xs uppercase tracking-[0.3em] text-gray-400">or</span>
@@ -137,17 +144,21 @@ function Login() {
           </CardContent>
         </Card>
         <p className="mt-auto text-center text-sm text-gray-500">
-          Don’t have an account?{' '}
+          Don't have an account?{' '}
           <Link to="/register" className="font-semibold text-purple-600">
             Sign up
+          </Link>
+          {' • '}
+          <Link to="/" className="font-semibold text-purple-600">
+            Back to home
           </Link>
         </p>
       </section>
       <section className="relative hidden w-1/2 bg-hero-gradient p-16 text-white lg:flex">
-        <div className="absolute right-10 top-10 flex items-center gap-3 text-2xl font-black tracking-[0.5em] text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] uppercase">
+        <Link to="/" className="absolute right-10 top-10 flex items-center gap-3 text-2xl font-black tracking-[0.5em] text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] uppercase hover:opacity-80 transition-opacity cursor-pointer">
           <Sparkles className="h-6 w-6 text-yellow-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]" />
           SUPPLIFY
-        </div>
+        </Link>
         <div className="m-auto max-w-md text-center">
           <p className="text-sm uppercase tracking-[0.4em] text-white/70">inventory management</p>
           <h2 className="mt-6 text-5xl font-semibold leading-tight">

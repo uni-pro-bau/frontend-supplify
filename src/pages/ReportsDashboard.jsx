@@ -5,7 +5,7 @@ import KPIBox from '../components/KPIBox.jsx';
 import ReportsTable from '../components/ReportsTable.jsx';
 import PieChartCard from '../components/PieChartCard.jsx';
 import BarChartCard from '../components/BarChartCard.jsx';
-import { FileDown, FileText, Boxes, AlertTriangle, DollarSign, Truck, RefreshCw } from 'lucide-react';
+import { FileDown, FileText, Boxes, AlertTriangle, DollarSign, Truck } from 'lucide-react';
 import { fetchDashboardData } from '../api/dashboard.js';
 
 const iconMap = {
@@ -26,20 +26,21 @@ function ReportsDashboard() {
   });
 
   useEffect(() => {
-    async function load() {
-      try {
-        setLoading(true);
-        const result = await fetchDashboardData();
-        setData(result);
-        setError(null);
-      } catch (err) {
-        setError('Failed to load data');
-      } finally {
-        setLoading(false);
-      }
-    }
-    load();
+    loadData();
   }, []);
+
+  async function loadData() {
+    try {
+      setLoading(true);
+      const result = await fetchDashboardData();
+      setData(result);
+      setError(null);
+    } catch (err) {
+      setError('Failed to load data');
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="space-y-8">
       <header className="flex flex-col gap-4 rounded-3xl bg-white p-8 shadow-card animate-in fade-in-50 slide-in-from-top-4 duration-500 lg:flex-row lg:items-center lg:justify-between">
@@ -56,14 +57,6 @@ function ReportsDashboard() {
           <Button variant="outline" className="border-purple-600 text-purple-600">
             <FileText size={16} className="mr-2" />
             Export to PDF
-          </Button>
-          <Button
-            variant="ghost"
-            className="text-xs font-medium text-purple-600"
-            onClick={() => window.location.reload()}
-          >
-            <RefreshCw size={14} className="mr-1" />
-            Refresh
           </Button>
         </div>
       </header>

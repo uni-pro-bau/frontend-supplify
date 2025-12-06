@@ -30,12 +30,12 @@ function Register() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  function handleChange(e) {
+    const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-  };
+  }
 
-  const handleSubmit = async () => {
+  async function handleSubmit() {
     try {
       setLoading(true);
       setError(null);
@@ -47,7 +47,7 @@ function Register() {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-gray-50 text-gray-900">
@@ -144,17 +144,21 @@ function Register() {
 
         <p className="mt-auto text-center text-sm text-gray-500">
           Already have an account?{' '}
-          <Link to="/" className="font-semibold text-purple-600">
+          <Link to="/login" className="font-semibold text-purple-600">
             Sign in
+          </Link>
+          {' • '}
+          <Link to="/" className="font-semibold text-purple-600">
+            Back to home
           </Link>
         </p>
       </section>
 
       <section className="relative hidden w-1/2 bg-hero-gradient p-16 text-white lg:flex">
-        <div className="absolute right-10 top-10 flex items-center gap-3 text-2xl font-black uppercase tracking-[0.5em] text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
+        <Link to="/" className="absolute right-10 top-10 flex items-center gap-3 text-2xl font-black uppercase tracking-[0.5em] text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.4)] hover:opacity-80 transition-opacity cursor-pointer">
           <Sparkles className="h-6 w-6 text-yellow-200 drop-shadow-[0_2px_6px_rgba(0,0,0,0.45)]" />
           SUPPLIFY
-        </div>
+        </Link>
         <div className="m-auto max-w-md text-center">
           <p className="text-sm uppercase tracking-[0.4em] text-white/70">Creative workspace</p>
           <h2 className="mt-6 text-5xl font-semibold leading-tight">

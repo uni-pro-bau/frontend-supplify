@@ -1,46 +1,61 @@
 import { Link, NavLink } from 'react-router-dom';
-import { ArrowLeft, Boxes, BarChart3, Building2 } from 'lucide-react';
+import { Boxes, BarChart3, Building2, LogOut } from 'lucide-react';
 
 function DashboardLayout({ children }) {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900 flex">
-      <aside className="hidden w-60 flex-col border-r border-gray-200 bg-white px-5 py-6 shadow-card/40 md:flex">
-        <Link to="/reports" className="mb-10 flex items-center gap-2 text-lg font-bold text-purple-900">
-          <span className="h-8 w-8 rounded-full bg-main-gradient" />
-          <span>Supplify</span>
+      <aside className="hidden w-64 flex-col border-r border-gray-200 bg-white px-6 py-8 shadow-sm md:flex">
+        <Link to="/" className="mb-12 flex items-center gap-3 group">
+          <span className="h-10 w-10 rounded-xl bg-main-gradient flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform" />
+          <span className="text-xl font-bold text-purple-900">Supplify</span>
         </Link>
-        <nav className="flex flex-1 flex-col gap-1 text-sm">
+        <nav className="flex flex-1 flex-col gap-2">
           <NavLink
             to="/reports"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50'}`
+              `flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 ${
+                isActive
+                  ? 'bg-purple-50 text-purple-700 shadow-sm border-l-4 border-purple-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-purple-600'
+              }`
             }
           >
-            <BarChart3 size={16} />
-            Dashboard
+            <BarChart3 size={20} />
+            <span>Dashboard</span>
           </NavLink>
           <NavLink
             to="/products"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50'}`
+              `flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 ${
+                isActive
+                  ? 'bg-purple-50 text-purple-700 shadow-sm border-l-4 border-purple-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-purple-600'
+              }`
             }
           >
-            <Boxes size={16} />
-            Products
+            <Boxes size={20} />
+            <span>Products</span>
           </NavLink>
           <NavLink
             to="/suppliers"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50'}`
+              `flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all duration-200 ${
+                isActive
+                  ? 'bg-purple-50 text-purple-700 shadow-sm border-l-4 border-purple-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-purple-600'
+              }`
             }
           >
-            <Building2 size={16} />
-            Suppliers
+            <Building2 size={20} />
+            <span>Suppliers</span>
           </NavLink>
         </nav>
-        <Link to="/" className="mt-8 inline-flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-purple-700">
-          <ArrowLeft size={14} />
-          Logout
+        <Link
+          to="/login"
+          className="mt-auto inline-flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-rose-50 hover:text-rose-600 transition-all duration-200 border border-transparent hover:border-rose-200"
+        >
+          <LogOut size={18} />
+          <span>Logout</span>
         </Link>
       </aside>
 
