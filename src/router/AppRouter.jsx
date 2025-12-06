@@ -2,6 +2,9 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from '../pages/Login.jsx';
 import Register from '../pages/Register.jsx';
 import ReportsDashboard from '../pages/ReportsDashboard.jsx';
+import Products from '../pages/Products.jsx';
+import Suppliers from '../pages/Suppliers.jsx';
+import TestApi from '../pages/TestApi.jsx';
 import DashboardLayout from '../layouts/DashboardLayout.jsx';
 
 function AppRouter() {
@@ -14,6 +17,30 @@ function AppRouter() {
         element={
           <DashboardLayout>
             <ReportsDashboard />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="/products"
+        element={
+          <DashboardLayout>
+            <Products />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="/suppliers"
+        element={
+          <DashboardLayout>
+            <Suppliers />
+          </DashboardLayout>
+        }
+      />
+      <Route
+        path="/test-api"
+        element={
+          <DashboardLayout>
+            <TestApi />
           </DashboardLayout>
         }
       />

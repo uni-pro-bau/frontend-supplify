@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card.jsx';
 import { Input } from '../components/ui/input.jsx';
 import { Button } from '../components/ui/button.jsx';
+import { api } from '../api/http.js';
 
 const countries = [
   'United States',
@@ -25,10 +26,28 @@ function Register() {
     password: '',
     country: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      // TODO: adjust endpoint and payload to match your backend contract
+      await api.post('/auth/register', form);
+      navigate('/reports');
+    } catch (err) {
+      console.error(err);
+      setError('Sign up failed. Please check your details.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -104,7 +123,11 @@ function Register() {
               </select>
             </div>
 
-            <Button className="w-full rounded-2xl text-base">Sign up for FREE</Button>
+            <Button className="w-full rounded-2xl text-base" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Creating account…' : 'Sign up for FREE'}
+            </Button>
+
+            {error && <p className="text-xs font-medium text-rose-600">{error}</p>}
 
             <p className="text-xs text-gray-500">
               By creating your account, you agree to the{' '}

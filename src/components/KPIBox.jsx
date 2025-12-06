@@ -2,7 +2,7 @@ import { cn } from '../lib/utils.js';
 
 function KPIBox({ label, value, delta, icon: Icon, trend = 'up' }) {
   return (
-    <div className="rounded-3xl border border-purple-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-xl">
+    <div className="rounded-3xl border border-purple-100 bg-white p-6 shadow-card transition hover:-translate-y-1 hover:shadow-xl animate-in fade-in-50 slide-in-from-bottom-2 duration-500">
       <div className="flex items-center justify-between">
         <span className="text-sm font-medium text-gray-500">{label}</span>
         {Icon ? (

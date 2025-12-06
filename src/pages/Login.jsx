@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card.
 import { Input } from '../components/ui/input.jsx';
 import { Button } from '../components/ui/button.jsx';
 import { Separator } from '../components/ui/separator.jsx';
+import { api } from '../api/http.js';
 
 const GoogleLogo = ({ className }) => (
   <svg
@@ -48,10 +49,25 @@ const AppleLogo = ({ className }) => (
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSignIn = () => {
-    navigate('/reports');
+  const handleSignIn = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      // TODO: adjust endpoint and payload to match your backend contract
+      await api.post('/auth/login', { email, password });
+      navigate('/reports');
+    } catch (err) {
+      console.error(err);
+      setError('Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -67,7 +83,13 @@ function Login() {
               <label className="text-sm font-medium text-purple-900">Email</label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-purple-300" size={18} />
-                <Input type="email" placeholder="you@email.com" className="pl-12" />
+                <Input
+                  type="email"
+                  placeholder="you@email.com"
+                  className="pl-12"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </div>
             </div>
             <div className="space-y-2">
@@ -78,6 +100,8 @@ function Login() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="••••••••"
                   className="pl-12 pr-12"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -88,11 +112,13 @@ function Login() {
                 </button>
               </div>
             </div>
+            {error && <p className="text-sm font-medium text-rose-600">{error}</p>}
+
             <div className="text-right text-sm font-semibold text-purple-600">
               <a href="#">Forgot password?</a>
             </div>
-            <Button className="w-full rounded-2xl text-base" onClick={handleSignIn}>
-              Sign in
+            <Button className="w-full rounded-2xl text-base" onClick={handleSignIn} disabled={loading}>
+              {loading ? 'Signing in…' : 'Sign in'}
             </Button>
             <div className="flex items-center gap-4">
               <Separator />
