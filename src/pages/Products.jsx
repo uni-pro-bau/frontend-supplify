@@ -6,10 +6,8 @@ function Products() {
     { name: 'Shipping Boxes (M)', category: 'Packaging', price: '$0.80', stock: 260, status: 'In stock' },
   ];
 
-  const handleEditProduct = (product) => {
-    // TODO: replace this with real navigation / API integration
-    // e.g. open edit modal or navigate to `/products/:id`
-    console.log('Edit product clicked:', product);
+  const handleEdit = (product) => {
+    console.log('Edit:', product);
   };
 
   return (
@@ -42,9 +40,8 @@ function Products() {
                   <td className="py-3">{product.stock}</td>
                   <td className="py-3">
                     <button
-                      type="button"
                       className="text-xs font-medium text-purple-600 hover:text-purple-800"
-                      onClick={() => handleEditProduct(product)}
+                      onClick={() => handleEdit(product)}
                     >
                       Edit
                     </button>

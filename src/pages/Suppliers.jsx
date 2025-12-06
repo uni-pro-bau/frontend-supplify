@@ -6,10 +6,8 @@ function Suppliers() {
     { name: 'OfficeOne', company: 'OfficeOne Supplies', phone: '+971 4 123 9876', email: 'orders@officeone.ae' },
   ];
 
-  const handleEditSupplier = (supplier) => {
-    // TODO: replace this with real navigation / API integration
-    // e.g. open edit modal or navigate to `/suppliers/:id`
-    console.log('Edit supplier clicked:', supplier);
+  const handleEdit = (supplier) => {
+    console.log('Edit:', supplier);
   };
 
   return (
@@ -42,9 +40,8 @@ function Suppliers() {
                   <td className="py-3">{supplier.email}</td>
                   <td className="py-3">
                     <button
-                      type="button"
                       className="text-xs font-medium text-purple-600 hover:text-purple-800"
-                      onClick={() => handleEditSupplier(supplier)}
+                      onClick={() => handleEdit(supplier)}
                     >
                       Edit
                     </button>

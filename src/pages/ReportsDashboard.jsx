@@ -26,29 +26,19 @@ function ReportsDashboard() {
   });
 
   useEffect(() => {
-    let cancelled = false;
     async function load() {
       try {
         setLoading(true);
         const result = await fetchDashboardData();
-        if (!cancelled) {
-          setData(result);
-          setError(null);
-        }
+        setData(result);
+        setError(null);
       } catch (err) {
-        if (!cancelled) {
-          setError('Failed to load dashboard data.');
-        }
+        setError('Failed to load data');
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     }
     load();
-    return () => {
-      cancelled = true;
-    };
   }, []);
   return (
     <div className="space-y-8">
@@ -56,9 +46,7 @@ function ReportsDashboard() {
         <div>
           <p className="text-xs uppercase tracking-[0.4em] text-purple-300">analytics</p>
           <h1 className="mt-2 text-4xl font-semibold text-purple-900">Reports Dashboard</h1>
-          <p className="mt-2 text-sm text-gray-500">
-            Generate and export inventory reports easily. Data is ready to be wired to your backend.
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Generate and export inventory reports easily.</p>
         </div>
         <div className="flex flex-wrap gap-3">
           <Button variant="outline" className="border-purple-600 text-purple-600">

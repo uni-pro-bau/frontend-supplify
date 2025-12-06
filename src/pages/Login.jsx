@@ -59,12 +59,11 @@ function Login() {
     try {
       setLoading(true);
       setError(null);
-      // TODO: adjust endpoint and payload to match your backend contract
       await api.post('/auth/login', { email, password });
       navigate('/reports');
     } catch (err) {
       console.error(err);
-      setError('Login failed. Please check your credentials.');
+      setError('Login failed');
     } finally {
       setLoading(false);
     }

@@ -13,9 +13,7 @@ function DashboardLayout({ children }) {
           <NavLink
             to="/reports"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${
-                isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50 hover:text-purple-700'
-              }`
+              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50'}`
             }
           >
             <BarChart3 size={16} />
@@ -24,9 +22,7 @@ function DashboardLayout({ children }) {
           <NavLink
             to="/products"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${
-                isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50 hover:text-purple-700'
-              }`
+              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50'}`
             }
           >
             <Boxes size={16} />
@@ -35,9 +31,7 @@ function DashboardLayout({ children }) {
           <NavLink
             to="/suppliers"
             className={({ isActive }) =>
-              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${
-                isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50 hover:text-purple-700'
-              }`
+              `flex items-center gap-2 rounded-full px-3 py-2 font-medium ${isActive ? 'bg-purple-50 text-purple-700' : 'text-gray-600 hover:bg-gray-50'}`
             }
           >
             <Building2 size={16} />

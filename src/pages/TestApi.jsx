@@ -8,13 +8,10 @@ function TestApi() {
   useEffect(() => {
     api
       .get('/test')
-      .then((res) => {
-        setData(res.data);
-        setError(null);
-      })
+      .then((res) => setData(res.data))
       .catch((err) => {
         console.error(err);
-        setError('Failed to reach backend.');
+        setError('Failed to reach backend');
       });
   }, []);
 

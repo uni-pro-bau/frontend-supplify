@@ -39,12 +39,11 @@ function Register() {
     try {
       setLoading(true);
       setError(null);
-      // TODO: adjust endpoint and payload to match your backend contract
       await api.post('/auth/register', form);
       navigate('/reports');
     } catch (err) {
       console.error(err);
-      setError('Sign up failed. Please check your details.');
+      setError('Sign up failed');
     } finally {
       setLoading(false);
     }

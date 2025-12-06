@@ -1,8 +1,4 @@
-// Simple API layer to prepare for a real backend integration.
-// Replace the setTimeout + hard-coded data with real fetch/axios calls later.
-
 export async function fetchDashboardData() {
-  // Simulate network delay
   await new Promise((resolve) => setTimeout(resolve, 400));
 
   return {
