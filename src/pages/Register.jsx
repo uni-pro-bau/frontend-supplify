@@ -36,14 +36,38 @@ function Register() {
   }
 
   async function handleSubmit() {
+    if (!form.name || !form.email || !form.password || !form.country) {
+      setError('Please fill all fields');
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
-      await api.post('/auth/register', form);
+      
+      const res = await api.post('/Auth/register', {
+        Name: form.name,
+        Email: form.email,
+        Password: form.password,
+        Country: form.country,
+      });
+      
+      const token = res.data?.token || res.data?.accessToken || res.data?.access_token || res.data?.Token;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      
       navigate('/reports');
     } catch (err) {
-      console.error(err);
-      setError('Sign up failed');
+      if (err.code === 'ERR_NETWORK') {
+        setError('Cannot connect to server. Please check your connection.');
+      } else if (err.response?.status === 400) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Email already exists or invalid data.');
+      } else if (err.response?.status >= 500) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Server error. Please try again later.');
+      } else {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Sign up failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

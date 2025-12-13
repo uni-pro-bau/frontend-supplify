@@ -56,14 +56,38 @@ function Login() {
   const navigate = useNavigate();
 
   async function handleSignIn() {
+    if (!email || !password) {
+      setError('Please enter email and password');
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
-      await api.post('/auth/login', { email, password });
+      
+      const res = await api.post('/Auth/login', { 
+        Email: email.trim(),
+        Password: password 
+      });
+      
+      const token = res.data?.token || res.data?.accessToken || res.data?.access_token || res.data?.Token;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      
       navigate('/reports');
     } catch (err) {
-      console.error(err);
-      setError('Login failed');
+      if (err.code === 'ERR_NETWORK') {
+        setError('Cannot connect to server. Please check your connection.');
+      } else if (err.response?.status === 401) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Invalid email or password.');
+      } else if (err.response?.status === 400) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Invalid request.');
+      } else if (err.response?.status >= 500) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Server error. Please try again later.');
+      } else {
+        setError('Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
