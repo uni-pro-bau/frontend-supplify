@@ -23,22 +23,87 @@ const mockData = {
     { name: 'Low stock', value: 12 },
   ],
   tableRows: [
-    { name: 'A4 Copy Paper', category: 'Office supplies', qty: 120, reorder: 50, status: 'Healthy' },
-    { name: 'Blue Ballpoint Pens', category: 'Stationery', qty: 34, reorder: 40, status: 'Warning' },
-    { name: 'Laser Printer Toner', category: 'Printing', qty: 8, reorder: 15, status: 'Critical' },
-    { name: 'Shipping Boxes (M)', category: 'Packaging', qty: 260, reorder: 100, status: 'Healthy' },
+    // Add simple dates and supplier names so we can demo filtering in the UI
+    {
+      name: 'A4 Copy Paper',
+      category: 'Office supplies',
+      qty: 120,
+      status: 'Healthy',
+      supplierName: 'PaperPlus Wholesale',
+      date: '2025-03-01',
+    },
+    {
+      name: 'Blue Ballpoint Pens',
+      category: 'Stationery',
+      qty: 34,
+      status: 'Warning',
+      supplierName: 'OfficeOne Supplies',
+      date: '2025-03-05',
+    },
+    {
+      name: 'Laser Printer Toner',
+      category: 'Printing',
+      qty: 8,
+      status: 'Critical',
+      supplierName: 'PrintPerfect Co.',
+      date: '2025-03-10',
+    },
+    {
+      name: 'Shipping Boxes (M)',
+      category: 'Packaging',
+      qty: 260,
+      status: 'Healthy',
+      supplierName: 'PackRight Packaging',
+      date: '2025-03-15',
+    },
   ],
 };
 
-export async function fetchDashboardData() {
+export async function fetchDashboardData(filters = {}) {
   try {
-    const res = await api.get('/dashboard');
-    return res.data;
+    const res = await api.get('/dashboard', { params: filters });
+    const base = res.data || {};
+
+    let supplierRows = [];
+    try {
+      const suppliersRes = await api.get('/suppliers');
+      const suppliers = suppliersRes.data || [];
+      supplierRows = suppliers.map((s) => ({
+        name: s.name,
+        category: s.company,
+        qty: s.totalProducts ?? '-',
+        supplierName: s.name,
+        status: s.status || 'Healthy',
+        date: s.lastUpdated,
+      }));
+    } catch {
+      // fallback to mock
+    }
+
+    return {
+      ...mockData,
+      ...base,
+      tableRows: supplierRows.length > 0 ? supplierRows : base.tableRows || mockData.tableRows,
+    };
   } catch (err) {
     console.error(err);
-    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    const { startDate, endDate } = filters;
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const filteredRows = mockData.tableRows.filter((row) => {
+        const rowDate = new Date(row.date);
+        return rowDate >= start && rowDate <= end;
+      });
+
+      return {
+        ...mockData,
+        tableRows: filteredRows.length > 0 ? filteredRows : mockData.tableRows,
+      };
+    }
+
     return mockData;
   }
 }
-
 

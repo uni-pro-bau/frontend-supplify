@@ -29,7 +29,7 @@ function ReportsTable({ rows = [] }) {
               <th className="py-3">Product name</th>
               <th className="py-3">Category</th>
               <th className="py-3">Qty in stock</th>
-              <th className="py-3">Reorder level</th>
+              <th className="py-3">Supplier</th>
               <th className="py-3">Status</th>
             </tr>
           </thead>
@@ -39,7 +39,7 @@ function ReportsTable({ rows = [] }) {
                 <td className="py-4 font-semibold">{row.name}</td>
                 <td className="py-4">{row.category}</td>
                 <td className="py-4">{row.qty}</td>
-                <td className="py-4">{row.reorder}</td>
+                <td className="py-4">{row.supplierName || '—'}</td>
                 <td className="py-4">
                   <StatusBadge state={row.status} />
                 </td>

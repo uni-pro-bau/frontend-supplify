@@ -36,14 +36,43 @@ function Register() {
   }
 
   async function handleSubmit() {
+    if (!form.name || !form.email || !form.password || !form.country) {
+      setError('Please fill all fields');
+      return;
+    }
+
+    if (form.password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
-      await api.post('/auth/register', form);
-      navigate('/reports');
+      
+      const res = await api.post('https://192.168.56.1:7035/api/Auth/register', {
+        Name: form.name,
+        Email: form.email,
+        Password: form.password,
+        Country: form.country,
+      });
+      
+      const token = res.data?.token || res.data?.accessToken || res.data?.access_token || res.data?.Token;
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      
+      navigate('/Login');
     } catch (err) {
-      console.error(err);
-      setError('Sign up failed');
+      if (err.code === 'ERR_NETWORK') {
+        setError('Cannot connect to server. Please check your connection.');
+      } else if (err.response?.status === 400) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Email already exists or invalid data.');
+      } else if (err.response?.status >= 500) {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Server error. Please try again later.');
+      } else {
+        setError(typeof err.response.data === 'string' ? err.response.data : 'Sign up failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -127,18 +156,6 @@ function Register() {
             </Button>
 
             {error && <p className="text-xs font-medium text-rose-600">{error}</p>}
-
-            <p className="text-xs text-gray-500">
-              By creating your account, you agree to the{' '}
-              <a href="#" className="font-semibold text-purple-600 underline-offset-4 hover:underline">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a href="#" className="font-semibold text-purple-600 underline-offset-4 hover:underline">
-                Privacy Notice
-              </a>
-              .
-            </p>
           </CardContent>
         </Card>
 
@@ -175,4 +192,3 @@ function Register() {
 }
 
 export default Register;
-

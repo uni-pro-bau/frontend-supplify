@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '../components/ui/button.jsx';
 import FilterBar from '../components/FilterBar.jsx';
 import KPIBox from '../components/KPIBox.jsx';
@@ -18,21 +18,25 @@ const iconMap = {
 function ReportsDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [activePreset, setActivePreset] = useState('Last 7 days');
   const [data, setData] = useState({
     kpis: [],
     barSeries: [],
     pieSeries: [],
     tableRows: [],
   });
+  const tableRef = useRef(null);
 
   useEffect(() => {
-    loadData();
+    handlePreset('Last 7 days');
   }, []);
 
-  async function loadData() {
+  async function loadData(filters = {}) {
     try {
       setLoading(true);
-      const result = await fetchDashboardData();
+      const result = await fetchDashboardData(filters);
       setData(result);
       setError(null);
     } catch (err) {
@@ -41,6 +45,43 @@ function ReportsDashboard() {
       setLoading(false);
     }
   }
+
+  async function handleGenerate() {
+    if (!startDate || !endDate) return;
+
+    await loadData({ startDate, endDate });
+
+    if (tableRef.current) {
+      tableRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function handlePreset(preset) {
+    setActivePreset(preset);
+    if (preset === 'Custom') return;
+
+    const today = new Date();
+    const end = today.toISOString().slice(0, 10);
+    const days = preset === 'Last 30 days' ? 30 : 7;
+    const start = new Date(today);
+    start.setDate(today.getDate() - days + 1);
+    const startStr = start.toISOString().slice(0, 10);
+
+    setStartDate(startStr);
+    setEndDate(end);
+    loadData({ startDate: startStr, endDate: end });
+  }
+
+  function handleChangeStart(value) {
+    setStartDate(value);
+    setActivePreset('Custom');
+  }
+
+  function handleChangeEnd(value) {
+    setEndDate(value);
+    setActivePreset('Custom');
+  }
+
   return (
     <div className="space-y-8">
       <header className="flex flex-col gap-4 rounded-3xl bg-white p-8 shadow-card animate-in fade-in-50 slide-in-from-top-4 duration-500 lg:flex-row lg:items-center lg:justify-between">
@@ -61,7 +102,15 @@ function ReportsDashboard() {
         </div>
       </header>
 
-      <FilterBar />
+      <FilterBar
+        startDate={startDate}
+        endDate={endDate}
+        activePreset={activePreset}
+        onChangeStart={handleChangeStart}
+        onChangeEnd={handleChangeEnd}
+        onSelectPreset={handlePreset}
+        onGenerate={handleGenerate}
+      />
 
       {loading && (
         <div className="rounded-3xl bg-white p-6 text-sm text-gray-500 shadow-card">
@@ -95,7 +144,9 @@ function ReportsDashboard() {
         <PieChartCard data={data.pieSeries} />
       </section>
 
-      <ReportsTable rows={data.tableRows} />
+      <div ref={tableRef}>
+        <ReportsTable rows={data.tableRows} />
+      </div>
     </div>
   );
 }

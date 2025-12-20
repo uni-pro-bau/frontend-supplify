@@ -47,8 +47,8 @@ function Products() {
     setForm({
       name: product.name,
       category: product.category,
-      price: product.price.replace('$', ''),
-      stock: product.stock.toString(),
+      price: String(product.price).replace('$', ''),
+      stock: String(product.stock),
     });
     setShowModal(true);
   }
@@ -64,18 +64,18 @@ function Products() {
     try {
       if (editingId) {
         await api.put(`/products/${editingId}`, form);
-        setProducts(products.map((p) => (p.id === editingId ? { ...form, id: editingId, price: `$${form.price}` } : p)));
+        setProducts(products.map((p) => (p.id === editingId ? { ...form, id: editingId } : p)));
       } else {
         const res = await api.post('/products', form);
-        setProducts([...products, { ...res.data, price: `$${form.price}` }]);
+        setProducts([...products, res.data]);
       }
       closeModal();
     } catch (err) {
       console.error(err);
       if (editingId) {
-        setProducts(products.map((p) => (p.id === editingId ? { ...form, id: editingId, price: `$${form.price}` } : p)));
+        setProducts(products.map((p) => (p.id === editingId ? { ...form, id: editingId } : p)));
       } else {
-        setProducts([...products, { ...form, id: Date.now(), price: `$${form.price}` }]);
+        setProducts([...products, { ...form, id: Date.now() }]);
       }
       closeModal();
     }
@@ -127,7 +127,7 @@ function Products() {
                 <tr key={product.id} className="border-t border-purple-50 text-purple-900">
                   <td className="py-3 font-semibold">{product.name}</td>
                   <td className="py-3">{product.category}</td>
-                  <td className="py-3">${product.price}</td>
+                  <td className="py-3">${String(product.price).replace('$', '')}</td>
                   <td className="py-3">{product.stock}</td>
                   <td className="py-3">
                     <div className="flex items-center gap-3">
