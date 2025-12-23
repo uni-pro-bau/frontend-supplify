@@ -1,0 +1,72 @@
+import { useState, useEffect } from 'react';
+
+function StatusBadge({ state }) {
+  const map = {
+    Healthy: 'bg-emerald-50 text-emerald-600',
+    Warning: 'bg-amber-50 text-amber-600',
+    Critical: 'bg-rose-50 text-rose-600',
+  };
+  return (
+    <span className={`rounded-full px-3 py-1 text-xs font-semibold ${map[state] || ''}`}>
+      {state}
+    </span>
+  );
+}
+
+export default function ReportsTable() {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const response = await fetch('https://192.168.56.1:7035/api/ProductSchedule/schedule');
+        const data = await response.json();
+        setRows(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getData();
+  }, []);
+
+  if (!rows || rows.length === 0) {
+    return (
+      <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-card">
+        <div className="text-center py-12 text-gray-400">
+          <p>No product data available</p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="rounded-3xl border border-gray-100 bg-white p-6 shadow-card">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[500px] border-collapse">
+          <thead>
+            <tr className="text-left text-xs uppercase tracking-wide text-purple-600">
+              <th className="py-3">Product name</th>
+              <th className="py-3">Category</th>
+              <th className="py-3">Qty in stock</th>
+              <th className="py-3">Supplier</th>
+              <th className="py-3">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index} className="border-t border-purple-50 text-sm text-purple-900">
+                <td className="py-4 font-semibold">{row.productName}</td>
+                <td className="py-4">{row.category}</td>
+                <td className="py-4">{row.qtyInStock}</td>
+                <td className="py-4">{row.supplier || '—'}</td>
+                <td className="py-4">
+                  <StatusBadge state={row.status} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
